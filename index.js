@@ -28,7 +28,14 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
+    const marathonCollection = client.db('marathonDB').collection('marathon');
 
+    app.post('/marathons', async(req, res)=>{
+        const newMarathon = req.body;
+        console.log(newMarathon);
+        const result = await marathonCollection.insertOne(newMarathon);
+        res.send(result);
+    })
 
 
 
