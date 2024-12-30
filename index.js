@@ -29,12 +29,18 @@ async function run() {
         await client.connect();
 
         const marathonCollection = client.db('marathonDB').collection('marathon');
+        const marathonRegisterCollection = client.db('marathonDB').collection('marathonRegister');
 
         // Add marathon data
         app.post('/marathons', async (req, res) => {
             const newMarathon = req.body;
-            console.log(newMarathon);
             const result = await marathonCollection.insertOne(newMarathon);
+            res.send(result);
+        })
+        // Marathon Register Post
+        app.post('/marathons-register', async (req, res) => {
+            const newMarathonRegister = req.body;
+            const result = await marathonRegisterCollection.insertOne(newMarathonRegister);
             res.send(result);
         })
 
@@ -44,6 +50,7 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         })
+
 
         // see more ditails
         app.get('/marathon/:id', async (req, res) => {
