@@ -41,8 +41,19 @@ async function run() {
         app.post('/marathons-register', async (req, res) => {
             const newMarathonRegister = req.body;
             const result = await marathonRegisterCollection.insertOne(newMarathonRegister);
-            res.send(result);
-        })
+        
+            const id = newMarathonRegister.register_id;
+        
+            const filter = { _id: new ObjectId(id) };
+            const updateDoc = {
+                $inc: { apply_count: 1 },
+            };
+            const updateResult = await marathonCollection.updateOne(filter, updateDoc);
+        
+            res.send({ result, updateResult });
+        });
+        
+
 
         // All marathon
         app.get('/marathons', async (req, res) => {
@@ -65,6 +76,13 @@ async function run() {
             const email = req.params.email;
             const query = { userEmail: email }
             const result = await marathonCollection.find(query).toArray();
+            res.send(result);
+        })
+        // my marathon register list
+        app.get('/marathons-register/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { userEmail: email }
+            const result = await marathonRegisterCollection.find(query).toArray();
             res.send(result);
         })
 
