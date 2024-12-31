@@ -61,6 +61,24 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         })
+        // Marathon Update
+        app.put('/marathons/:id', async(req, res)=>{
+            const id = req.params.id;
+            const mrathon = req.body;
+            console.log(mrathon);
+            const filter= {_id: new ObjectId(id)};
+            const options= {upsert: true};
+            const updatedMarathon ={
+                $set:{
+                   title: mrathon.title,
+                    location: mrathon.location,
+                    runningDitance: mrathon.runningDistance,
+                    photoURL: mrathon.photoURL,
+                }
+            }
+            const result = await marathonCollection.updateOne(filter, updatedMarathon, options)  
+            res.send(result);
+        })
 
         // Marathon delete
         app.delete('/marathons/:id',async(req, res)=>{
