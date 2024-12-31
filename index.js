@@ -31,7 +31,7 @@ async function run() {
         const marathonCollection = client.db('marathonDB').collection('marathon');
         const marathonRegisterCollection = client.db('marathonDB').collection('marathonRegister');
 
-        // Add marathon data
+        // Marathon data Post
         app.post('/marathons', async (req, res) => {
             const newMarathon = req.body;
             const result = await marathonCollection.insertOne(newMarathon);
@@ -55,15 +55,24 @@ async function run() {
         
 
 
-        // All marathon
+        // Marathon Data Get
         app.get('/marathons', async (req, res) => {
             const cursor = marathonCollection.find().limit(6);
             const result = await cursor.toArray();
             res.send(result);
         })
 
+        // Marathon delete
+        app.delete('/marathons/:id',async(req, res)=>{
+            const id =req.params.id;
+            console.log("Please Delete From DaraBase", id);
+            const query={_id: new ObjectId(id)}
+            const result= await marathonCollection.deleteOne(query);
+            res.send(result);
+        })
 
-        // see more ditails
+
+        // see more ditails of marathon
         app.get('/marathon/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
