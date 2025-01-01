@@ -26,7 +26,7 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
 
         const marathonCollection = client.db('marathonDB').collection('marathon');
         const marathonRegisterCollection = client.db('marathonDB').collection('marathonRegister');
@@ -65,7 +65,6 @@ async function run() {
         app.put('/marathons/:id', async(req, res)=>{
             const id = req.params.id;
             const mrathon = req.body;
-            console.log(mrathon);
             const filter= {_id: new ObjectId(id)};
             const options= {upsert: true};
             const updatedMarathon ={
@@ -83,7 +82,6 @@ async function run() {
         // Marathon delete
         app.delete('/marathons/:id',async(req, res)=>{
             const id =req.params.id;
-            console.log("Please Delete From DaraBase", id);
             const query={_id: new ObjectId(id)}
             const result= await marathonCollection.deleteOne(query);
             res.send(result);
@@ -118,7 +116,6 @@ async function run() {
         app.put('/marathons-register/:id', async(req, res)=>{
             const id = req.params.id;
             const marathonRegister = req.body;
-            console.log(marathonRegister);
             const filter= {_id: new ObjectId(id)};
             const options= {upsert: true};
             const updatedmarathonRegister ={
@@ -143,8 +140,8 @@ async function run() {
 
 
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+        // await client.db("admin").command({ ping: 1 });
+        // console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
         // await client.close();
