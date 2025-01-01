@@ -113,6 +113,26 @@ async function run() {
             res.send(result);
         })
 
+
+        // Update my marathon register
+        app.put('/marathons-register/:id', async(req, res)=>{
+            const id = req.params.id;
+            const marathonRegister = req.body;
+            console.log(marathonRegister);
+            const filter= {_id: new ObjectId(id)};
+            const options= {upsert: true};
+            const updatedmarathonRegister ={
+                $set:{
+                   contactNumber: marathonRegister.contactNumber,
+                    firstName: marathonRegister.firstName,
+                    lastName: marathonRegister.lastName,
+                    age: marathonRegister.age,
+                }
+            }
+            const result = await marathonRegisterCollection.updateOne(filter, updatedmarathonRegister, options); 
+            res.send(result);
+        })
+
         // my regitration delete
         app.delete('/marathons-register/:id',async(req, res)=>{
             const id =req.params.id;
